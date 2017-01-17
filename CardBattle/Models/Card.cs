@@ -8,6 +8,20 @@ namespace CardBattle.Models
 {
     public class Card : IEquatable<Card>, IComparable<Card>, IComparable
     {
+        private static int _comparisonCount;
+        public static int ComparisonCount
+        {
+            get
+            {
+                return _comparisonCount;
+            }
+        }
+        
+        public static void ResetComparisonCount()
+        {
+            _comparisonCount = 0;
+        }
+
         public Card(Values value, Suits suit)
         {
             _value = value;
@@ -82,6 +96,8 @@ namespace CardBattle.Models
 
         public int CompareTo(Card other)
         {
+            System.Threading.Interlocked.Increment(ref _comparisonCount);
+
             if (ReferenceEquals(other, null))
             {
                 return 1;
