@@ -82,6 +82,33 @@ namespace CardBattle
             }
 
             Console.WriteLine("shake: " + Card.ComparisonCount);
+            Card.ResetComparisonCount();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                dealer.Shuffle();
+
+                var deck = dealer.Deal(52).ToList();
+                deck = deck.Concat(deck).ToList();
+
+                deck = Sorts.MergeSort(deck);
+            }
+
+            Console.WriteLine("merge: " + Card.ComparisonCount);
+            Card.ResetComparisonCount();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                dealer.Shuffle();
+
+                var deck = dealer.Deal(52).ToList();
+                deck = deck.Concat(deck).ToList();
+
+                deck = Sorts.QuickSort(deck);
+            }
+
+            Console.WriteLine("quick: " + Card.ComparisonCount);
+
         }
 
         private static void PrintSyracuse(ulong v)
