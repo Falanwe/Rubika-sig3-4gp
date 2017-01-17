@@ -13,9 +13,75 @@ namespace CardBattle
     {
         static void Main(string[] args)
         {
-            PrintSyracuse(27);
+            TestSorts();
 
             Console.ReadLine();
+        }
+
+        private static void TestSorts()
+        {
+            var dealer = new CardDealer();
+
+
+            for (var i = 0; i < 1000; i++)
+            {
+                dealer.Shuffle();
+                var deck = dealer.Deal(52).ToList();
+                deck = deck.Concat(deck).ToList();
+                deck.Sort();
+            }
+
+            Console.WriteLine("list.sort: " + Card.ComparisonCount);
+            Card.ResetComparisonCount();
+
+
+            for (var i = 0; i < 1000; i++)
+            {
+                dealer.Shuffle();
+                var deck = dealer.Deal(52).ToList();
+                deck = deck.Concat(deck).ToList();
+                deck = deck.OrderBy(_ => _).ToList();
+            }
+
+            Console.WriteLine("linq: " + Card.ComparisonCount);
+            Card.ResetComparisonCount();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                dealer.Shuffle();
+                var deck = dealer.Deal(52).ToList();
+                deck = deck.Concat(deck).ToList();
+                Sorts.InsertionSort(deck);
+            }
+
+            Console.WriteLine("insertion: " + Card.ComparisonCount);
+
+            Card.ResetComparisonCount();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                dealer.Shuffle();
+                var deck = dealer.Deal(52).ToList();
+                deck = deck.Concat(deck).ToList();
+
+                Sorts.BubleSort(deck);
+            }
+
+            Console.WriteLine("bubble: " + Card.ComparisonCount);
+
+
+            Card.ResetComparisonCount();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                dealer.Shuffle();
+                var deck = dealer.Deal(52).ToList();
+                deck = deck.Concat(deck).ToList();
+
+                Sorts.ShakeSort(deck);
+            }
+
+            Console.WriteLine("shake: " + Card.ComparisonCount);
         }
 
         private static void PrintSyracuse(ulong v)
