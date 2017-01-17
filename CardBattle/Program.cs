@@ -16,7 +16,7 @@ namespace CardBattle
 
           
 
-            for(var i = 0; i<100; i++)
+            for(var i = 0; i<26; i++)
             {
                 var firstCard = dealer.Deal();
                 var secondCard = dealer.Deal();

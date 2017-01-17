@@ -9,6 +9,11 @@ namespace CardBattle.Services
 {
     public class CardDealer
     {
+        public CardDealer()
+        {
+            Shuffle();
+        }
+
         private Random _random = new Random();
 
         private List<Card> _availableCards = new List<Card>();
