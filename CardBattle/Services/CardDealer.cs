@@ -38,6 +38,10 @@ namespace CardBattle.Services
             }
         }
 
+        /// <summary>
+        /// Deal a random card from available cards.
+        /// </summary>
+        /// <returns>A random card</returns>
         public Card Deal()
         {
             lock (_availableCards)
