@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using CardBattle.Enumerables;
+using CardBattle.Infrastructure;
 using CardBattle.Models;
+using CardBattle.Player;
 using CardBattle.Services;
 using System;
 using System.Collections.Generic;
@@ -14,22 +16,25 @@ namespace CardBattle
     {
         static void Main(string[] args)
         {
-            var containerBuilder = new ContainerBuilder();
-
-            containerBuilder.RegisterType<CardDealer>();
-
-            var logger = new ConsoleLogger();
-            logger.MinLevel = LogLevel.Debug;
-
-            containerBuilder.RegisterInstance(logger).As<ILogger>();
-
-            var container = containerBuilder.Build();
-
-            var dealer = container.Resolve<CardDealer>();
-
-            Console.WriteLine(dealer.Deal());
+            MainTournament();
 
             Console.ReadLine();
+        }
+
+        private static void MainTournament()
+        {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<CardDealer>();
+            builder.RegisterType<RandomProvider>().SingleInstance();
+            builder.RegisterInstance(new ConsoleLogger { MinLevel = LogLevel.Warning }).As<ILogger>().SingleInstance();
+            builder.RegisterAssemblyTypes(typeof(Program).Assembly).Where(t => t.IsAssignableTo<IPlayer>()).As<IPlayer>();
+            builder.RegisterType<LeagueOrganizer>();
+
+            var container = builder.Build();
+
+            var orga = container.Resolve<LeagueOrganizer>();
+            orga.RunLeague();
         }
 
         //private static void TestSorts()

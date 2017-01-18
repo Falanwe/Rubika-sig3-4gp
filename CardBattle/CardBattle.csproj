@@ -47,8 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerables\EnumerableExtensions.cs" />
     <Compile Include="Enumerables\Sorts.cs" />
     <Compile Include="Enumerables\Suites.cs" />
+    <Compile Include="Infrastructure\Game.cs" />
+    <Compile Include="Infrastructure\LeagueOrganizer.cs" />
+    <Compile Include="Infrastructure\MatchDescription.cs" />
+    <Compile Include="Infrastructure\TournamentOrganiser.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\Suits.cs" />
     <Compile Include="Models\Values.cs" />
@@ -60,15 +65,14 @@
     <Compile Include="Services\CardDealer.cs" />
     <Compile Include="Services\ConsoleLogger.cs" />
     <Compile Include="Services\ILogger.cs" />
+    <Compile Include="Services\RandomProvider.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
