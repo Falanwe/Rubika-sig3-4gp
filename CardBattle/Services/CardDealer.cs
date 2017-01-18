@@ -9,8 +9,11 @@ namespace CardBattle.Services
 {
     public class CardDealer
     {
-        public CardDealer()
+        private readonly ILogger _logger;
+
+        public CardDealer(ILogger logger)
         {
+            _logger = logger;
             Shuffle();
         }
 
@@ -20,6 +23,8 @@ namespace CardBattle.Services
 
         public void Shuffle()
         {
+            _logger.Log(LogLevel.Trace, "Deck shuffled!");
+
             _availableCards.Clear();
             foreach (Suits s in Enum.GetValues(typeof(Suits)))
             {
@@ -44,6 +49,7 @@ namespace CardBattle.Services
         /// <returns>A random card</returns>
         public Card Deal()
         {
+            _logger.Log(LogLevel.Debug, "Dealt a card.");
             lock (_availableCards)
             {
                 if (_availableCards.Count == 0)
