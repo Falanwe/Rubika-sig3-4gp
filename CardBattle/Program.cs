@@ -34,6 +34,7 @@ namespace CardBattle
             var container = builder.Build();
 
             var orga = container.Resolve<LeagueOrganizer>();
+            orga.GamesNumberPerTournament = 1000;
             orga.RunLeague();
         }
 
