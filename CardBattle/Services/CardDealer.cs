@@ -10,14 +10,14 @@ namespace CardBattle.Services
     public class CardDealer
     {
         private readonly ILogger _logger;
+        private readonly RandomProvider _randomProvider;
 
-        public CardDealer(ILogger logger)
+        public CardDealer(ILogger logger, RandomProvider randomProvider)
         {
             _logger = logger;
+            _randomProvider = randomProvider;
             Shuffle();
         }
-
-        private Random _random = new Random();
 
         private List<Card> _availableCards = new List<Card>();
 
@@ -57,7 +57,7 @@ namespace CardBattle.Services
                     throw new InvalidOperationException("No card available!");
                 }
 
-                var index = _random.Next(_availableCards.Count);
+                var index = _randomProvider.Random.Next(_availableCards.Count);
                 var result = _availableCards[index];
                 _availableCards.RemoveAt(index);
 
