@@ -7,7 +7,7 @@ using CardBattle.Models;
 
 namespace CardBattle.Player
 {
-    public class MaxValuePlayer : IPlayer
+    public class MinValuePlayer : IPlayer
     {
         public string Author
         {
@@ -21,31 +21,32 @@ namespace CardBattle.Player
         {
             get
             {
-                return "MaxValue";
+                return "MinValue";
             }
         }
 
         private List<Card> _cards;
         public void Deal(IEnumerable<Card> cards)
         {
-            _cards = cards.ToList();
+            _cards = cards.OrderBy(c => c).ToList();
+            _turn = 0;
         }
 
         public void Initialize(int playerCount, int position)
         {
-            // do nothing
+            _turn = 0;
         }
 
+        private int _turn = 0;
         public Card PlayCard()
         {
-            var cardToPlay = _cards.Max();
-            _cards.Remove(cardToPlay);
-            return cardToPlay;
+            var result = _cards[_turn];
+            _turn++;
+            return result;
         }
 
         public void ReceiveFoldResult(FoldResult result)
         {
-            // do nothing
         }
     }
 }

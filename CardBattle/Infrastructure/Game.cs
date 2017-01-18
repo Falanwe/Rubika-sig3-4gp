@@ -72,7 +72,7 @@ namespace CardBattle.Infrastructure
                 var card = _players[i].PlayCard();
                 if (!_hands[i].Remove(card))
                 {
-                    throw new InvalidOperationException(_players[i].Name + "is a cheater!");
+                    throw new InvalidOperationException(_players[i].Name + " is a cheater!");
                 }
 
                 _logger.Log(LogLevel.Debug, card.ToString());
