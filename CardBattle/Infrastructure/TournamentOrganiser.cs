@@ -63,7 +63,9 @@ namespace CardBattle.Infrastructure
             var winnerIndex = _scores.IndexOf(_scores.Max());
             var winner = _players[winnerIndex];
 
-            _logger.Log(LogLevel.Warning, "Player " + winner.Name + " from " + winner.Author + " at position " + winnerIndex + " won the tournament.");
+            var log = this.HandSize+" cards => " + string.Join(", ", _players.Select((player, index) => new { player, score = _scores[index] }).OrderByDescending(v => v.score).Select(v => v.player.Name + ": " + v.score).ToArray());
+            
+            _logger.Log(LogLevel.Warning, log);
         }
 
         public void PlayGame()
