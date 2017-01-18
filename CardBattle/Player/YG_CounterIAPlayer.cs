@@ -9,7 +9,7 @@ using CardBattle.Services;
 
 namespace CardBattle.Player
 {
-    class YG_CounterIAPlayer //:  IPlayer
+    class YG_CounterIAPlayer : IPlayer
     {
         public string Author
         {
@@ -27,84 +27,111 @@ namespace CardBattle.Player
             }
         }
 
-        private int _cardCountOnBegin;
-        private int _playerCount;
-        private Random _rand;
-        private List<Card> _win;
-        private List<Card> _hand;
-        private List<Card> _playedCards;
+        private int _player;
+        private int _betterCardPlayed;
+        private int _lessCardPlayed;
+        private List<Card> _better;
+        private List<Card> _cards;
+        private List<Card> _cardPlayed;
         public void Deal(IEnumerable<Card> cards)
         {
-            _hand = cards.ToList();
-            _cardCountOnBegin = _hand.Count;
-            Sorts.QuickSort<Card>(_hand);
-            _hand.Reverse();
+            _betterCardPlayed = 0;
+            _cards = cards.ToList();
+            _cards.Sort();
+            _cards.Reverse();
+        }
+
+        private int CardValue(Card card){
+            return (int)card.Value * 4 + (int)card.Suit + 1;
+        }
+
+        private int CardBetterThan(Card card){
+            Card tmp = new Card(Values.Ace, Suits.Spades);
+            return CardValue(tmp) - CardValue(card);
         }
 
         public void Initialize(int playerCount, int position)
         {
-            _playerCount = playerCount;
-            _win = new List<Card>();
-            _playedCards = new List<Card>();
-            RandomProvider tmp = new RandomProvider();
-            _rand = tmp.Random;
+            _player = playerCount;
+            _better = new List<Card>();
+            _cardPlayed = new List<Card>();
         }
 
-        private int nbCardBetterThan(Card card)
+        private void updateCardPlayed()
         {
-            return ((int)Values.Ace - (int)card.Value) * 4 + ((int)Suits.Spades - (int)card.Suit);
-        }
-
-        private int nbCardPlayedBetterThan(Card card)
-        {
-            var res = 0;
-            foreach(var element in _playedCards.Concat(_hand).Concat(_win))
+            if (_cards.Count > 0)
             {
-                if(element > card)
+                List<Card> tmp = new List<Card>(_cardPlayed);
+                foreach (var element in tmp)
                 {
-                    res++;
+                    if (element > _cards.First())
+                    {
+                        _betterCardPlayed++;
+                        _cardPlayed.Remove(element);
+                    }
+                    else if (element < _cards.Last())
+                    {
+                        _lessCardPlayed++;
+                        _cardPlayed.Remove(element);
+                    }
                 }
             }
-            return res;
         }
 
         public Card PlayCard()
         {
-            Card res;
-            if(_hand.Count > 0)
+            if (_cards.Count > 0)
             {
-                if (nbCardPlayedBetterThan(_hand.First()) == nbCardBetterThan(_hand.First()))
+                if (CardBetterThan(_cards.First()) == _betterCardPlayed)
                 {
-                    _win.Add(_hand.First());
-                    _hand.Remove(_hand.First());
+                    _better.Add(_cards.First());
+                    _cards.Remove(_cards.First());
+                    updateCardPlayed();
                     return PlayCard();
                 }
                 else
                 {
-                    res = _hand.Last();
-                    _hand.Remove(res);
+                    var ratioMin = _lessCardPlayed / CardValue(_cards.Last());
+                    var ratioMax = _betterCardPlayed / CardBetterThan(_cards.First());
+                    Card play;
+                    if(ratioMin * _player < ratioMax)
+                    {
+                        play = _cards.First();
+                    }
+                    else
+                    {
+                        play = _cards.Last();
+                    }
+                    _cards.Remove(play);
+                    return play;
                 }
             }
             else
             {
-                if (_win.Count > 0)
-                {
-                    res = _win.Last();
-                    _win.Remove(res);
-                }
-                else
-                {
-                    throw new IndexOutOfRangeException();
-                }
+                var play = _better.Last();
+                _better.Remove(play);
+                return play;
             }
-            return res;
         }
 
         public void ReceiveFoldResult(FoldResult result)
         {
-            foreach(var element in result.CardsPlayed)
-            {
-                _playedCards.Add(element);
+            foreach(var element in result.CardsPlayed){
+                if (_cards.Count > 0)
+                {
+                    if (element > _cards.First())
+                    {
+                        _betterCardPlayed++;
+                    }
+                    else if (element < _cards.Last())
+                    {
+                        _lessCardPlayed++;
+                    }
+                    else
+                    {
+                        _cardPlayed.Add(element);
+                    }
+                }
             }
         }
     }

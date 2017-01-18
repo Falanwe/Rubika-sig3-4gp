@@ -11,6 +11,7 @@ namespace CardBattle.Player
     class TheCardBattleAI : IPlayer
     {
         private ILogger Logger { get; set; }
+        private RandomProvider RandomProvider { get; set; }
 
         private int PlayerCount { get; set; }
         private int Position { get; set; }
@@ -26,6 +27,7 @@ namespace CardBattle.Player
         public TheCardBattleAI(ILogger logger, RandomProvider random)
         {
             this.Logger = logger;
+            this.RandomProvider = random;
         }
 
         public void Initialize(int playerCount, int position)
@@ -60,37 +62,53 @@ namespace CardBattle.Player
                 this.DealtCards.Add(dealtCard);
                 this.CardsInHand.Add(dealtCard);
             }
+
+            this.CardDeck.Sort((a, b) => b.CompareTo(a));
+            this.CardDeck.Sort((a, b) => b.CompareTo(a));
         }
 
         public Card PlayCard()
         {
-            if(this.CardsInHand.Count == 1)
+            // 1 CARD LEFT
+            if (this.CardsInHand.Count == 1)
             {
                 Card card = this.CardsInHand[0];
                 this.CardsInHand.Remove(card);
                 return card;
             }
+            // 2 CARDS LEFT
+            else if(this.CardsInHand.Count == 2)
+            {
+                Card card = this.CardsInHand.Max();
+                this.CardsInHand.Remove(card);
+                return card;
+            }
+            // ELSE
             else
             {
-                Card card;
-
-                this.CardsInHand.Sort((a,b)=> b.CompareTo(a));
-                this.CardDeck.Sort((a, b) => b.CompareTo(a));
+                Card card = null;
 
                 int deltaValue = (int)(this.CardDeck.First().Value) - (int)(this.CardsInHand.First().Value);
 
-                if(deltaValue >= 5)
+                /*if (deltaValue >= 5)
                 {
                     card = this.CardsInHand.Last();
                 }
-                else if(deltaValue >= 0)
+                else */if (deltaValue >= 0)
                 {
-                    int middle = this.CardsInHand.Count / 2;
+                    //int middle = this.CardsInHand.Count / 2;
+                    int middle = this.RandomProvider.Random.Next(1, this.CardsInHand.Count - 1);
                     card = this.CardsInHand[middle];
                 }
                 else
                 {
                     card = this.CardsInHand.First();
+                }
+
+                //*********************
+                if (card == null)
+                {
+                    card = this.CardsInHand.Last();
                 }
 
                 this.CardsInHand.Remove(card);
@@ -100,7 +118,7 @@ namespace CardBattle.Player
 
         public void ReceiveFoldResult(FoldResult result)
         {
-            foreach(Card playedCard in result.CardsPlayed)
+            foreach (Card playedCard in result.CardsPlayed)
             {
                 if (!this.DealtCards.Contains(playedCard))
                 {

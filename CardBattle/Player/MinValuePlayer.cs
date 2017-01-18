@@ -7,7 +7,7 @@ using CardBattle.Models;
 
 namespace CardBattle.Player
 {
-    public class MinValuePlayer //: IPlayer
+    public class MinValuePlayer : IPlayer
     {
         public string Author
         {

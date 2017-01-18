@@ -15,10 +15,10 @@ namespace CardBattle.Infrastructure
             { 2, 5 },
             { 2, 15 },
             { 2, 25 },
-            //{ 3, 5 },
-            //{ 3, 10 },
-            //{ 4, 5 },
-            //{ 4,10 },
+            { 3, 5 },
+            { 3, 10 },
+            { 4, 5 },
+            { 4,10 },
         };
         private readonly CardDealer _dealer;
         private readonly ILogger _logger;

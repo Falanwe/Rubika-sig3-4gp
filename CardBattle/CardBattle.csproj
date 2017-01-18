@@ -58,6 +58,7 @@
     <Compile Include="Models\Suits.cs" />
     <Compile Include="Models\Values.cs" />
     <Compile Include="Models\FoldResult.cs" />
+    <Compile Include="Player\AnalyzePlayer.cs" />
     <Compile Include="Player\BestPlayer.cs" />
     <Compile Include="Player\David.cs" />
     <Compile Include="Player\EricPlayer.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Player\MaxValuePlayer.cs" />
     <Compile Include="Player\MiddleSortedPlayer.cs" />
     <Compile Include="Player\MinValuePlayer.cs" />
+    <Compile Include="Player\NayosIA.cs" />
     <Compile Include="Player\PierrePlayer.cs" />
     <Compile Include="Player\TheCardBattleAI.cs" />
     <Compile Include="Player\YG_CounterIAPlayer.cs" />
