@@ -52,6 +52,9 @@
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\Suits.cs" />
     <Compile Include="Models\Values.cs" />
+    <Compile Include="Models\FoldResult.cs" />
+    <Compile Include="Player\IPlayer.cs" />
+    <Compile Include="Player\MaxValuePlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CardDealer.cs" />
@@ -62,6 +65,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
